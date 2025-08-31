@@ -14,54 +14,12 @@ UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-HTML = '''
-<!doctype html>
-<title>File Automation Web App</title>
-<h2>File Automation Web App</h2>
-<form method=post enctype=multipart/form-data action="/download_pdfs">
-  <h3>Download PDFs from URLs</h3>
-  URLs (one per line):<br>
-  <textarea name=urls rows=5 cols=50></textarea><br>
-  Prefix: <input name=prefix value="Report_"><br>
-  <input type=submit value="Download PDFs">
-</form>
-<hr>
-<form method=post action="/rename_files">
-  <h3>Rename Files</h3>
-  Directory: <input name=directory value="downloads"><br>
-  Prefix: <input name=prefix value="Report_"><br>
-  Extension: <input name=extension value=".pdf"><br>
-  <input type=submit value="Rename Files">
-</form>
-<hr>
-<form method=post action="/clean_folder">
-  <h3>Clean Folder (Move Images)</h3>
-  Source Dir: <input name=source_dir value="images"><br>
-  Target Dir: <input name=target_dir value="organized_images"><br>
-  Extensions (comma separated): <input name=extensions value=".jpg,.png"><br>
-  <input type=submit value="Clean Folder">
-</form>
-<hr>
-<form method=post action="/bulk_rename_images">
-  <h3>Bulk Rename Images</h3>
-  Directory: <input name=directory value="organized_images"><br>
-  Extensions (comma separated): <input name=extensions value=".jpg,.png"><br>
-  <input type=submit value="Bulk Rename Images">
-</form>
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-'''
+
+from flask import render_template
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template_string(HTML)
+    return render_template("index.html")
 
 @app.route("/download_pdfs", methods=["POST"])
 def web_download_pdfs():
