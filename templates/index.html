@@ -1,46 +1,79 @@
 <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Automation Web App</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
-    <style>
-        body { background: #f9fafb; padding: 2em; }
-        .ui.container { background: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        h2 { margin-top: 0; }
-        .ui.form textarea { min-height: 80px; }
-        .ui.divider { margin: 2em 0; }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="ui container">
-        <h2 class="ui header">File Automation Web App</h2>
+<body class="bg-gray-100 min-h-screen">
+    <div class="max-w-2xl mx-auto py-10">
+        <h2 class="text-3xl font-bold text-center mb-8 text-blue-700">File Automation Web App</h2>
+
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <form method="post" enctype="multipart/form-data" action="/download_pdfs">
+                <h3 class="text-xl font-semibold mb-2 text-gray-800">Download PDFs from URLs</h3>
+                <label class="block mb-2 text-gray-600">URLs (one per line):</label>
+                <textarea name="urls" rows="4" class="w-full p-2 border rounded mb-2" placeholder="Enter URLs..."></textarea>
+                <label class="block mb-2 text-gray-600">Prefix:</label>
+                <input name="prefix" value="Report_" class="w-full p-2 border rounded mb-4" />
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Download PDFs</button>
+            </form>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <form method="post" action="/rename_files">
+                <h3 class="text-xl font-semibold mb-2 text-gray-800">Rename Files</h3>
+                <label class="block mb-2 text-gray-600">Directory:</label>
+                <input name="directory" value="downloads" class="w-full p-2 border rounded mb-2" />
+                <label class="block mb-2 text-gray-600">Prefix:</label>
+                <input name="prefix" value="Report_" class="w-full p-2 border rounded mb-2" />
+                <label class="block mb-2 text-gray-600">Extension:</label>
+                <input name="extension" value=".pdf" class="w-full p-2 border rounded mb-4" />
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Rename Files</button>
+            </form>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <form method="post" action="/clean_folder">
+                <h3 class="text-xl font-semibold mb-2 text-gray-800">Clean Folder (Move Images)</h3>
+                <label class="block mb-2 text-gray-600">Source Dir:</label>
+                <input name="source_dir" value="images" class="w-full p-2 border rounded mb-2" />
+                <label class="block mb-2 text-gray-600">Target Dir:</label>
+                <input name="target_dir" value="organized_images" class="w-full p-2 border rounded mb-2" />
+                <label class="block mb-2 text-gray-600">Extensions (comma separated):</label>
+                <input name="extensions" value=".jpg,.png" class="w-full p-2 border rounded mb-4" />
+                <button type="submit" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">Clean Folder</button>
+            </form>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6 mb-8">
+            <form method="post" action="/bulk_rename_images">
+                <h3 class="text-xl font-semibold mb-2 text-gray-800">Bulk Rename Images</h3>
+                <label class="block mb-2 text-gray-600">Directory:</label>
+                <input name="directory" value="organized_images" class="w-full p-2 border rounded mb-2" />
+                <label class="block mb-2 text-gray-600">Extensions (comma separated):</label>
+                <input name="extensions" value=".jpg,.png" class="w-full p-2 border rounded mb-4" />
+                <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Bulk Rename Images</button>
+            </form>
+        </div>
+
         {% with messages = get_flashed_messages() %}
           {% if messages %}
-            <div class="ui positive message">
-              <ul class="list">
-                {% for message in messages %}
-                  <li>{{ message }}</li>
-                {% endfor %}
+            <div class="mb-4">
+              <ul class="list-disc pl-5 text-red-600">
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
               </ul>
             </div>
           {% endif %}
         {% endwith %}
-        <form class="ui form" method="post" enctype="multipart/form-data" action="/download_pdfs">
-            <h4 class="ui dividing header">Download PDFs from URLs</h4>
-            <div class="field">
-                <label>URLs (one per line)</label>
-                <textarea name="urls"></textarea>
-            </div>
-            <div class="two fields">
-                <div class="field">
-                    <label>Prefix</label>
-                    <input name="prefix" value="Report_">
-                </div>
-            </div>
-            <button class="ui primary button" type="submit">Download PDFs</button>
-        </form>
+    </div>
+</body>
+</html>
         <div class="ui divider"></div>
         <form class="ui form" method="post" action="/rename_files">
             <h4 class="ui dividing header">Rename Files</h4>
